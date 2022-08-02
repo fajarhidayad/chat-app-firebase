@@ -1,15 +1,18 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Head from "next/head";
+import { useAtom } from "jotai";
 
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../utils/googleAuth";
 import { LoadingPage } from "../components/LazyLoad";
 import SideBar from "../layouts/SideBar";
 import ChatLayout from "../layouts/ChatLayout";
+import { userAtom } from "../store";
 
 const Home: NextPage = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useAtom(userAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,12 +23,15 @@ const Home: NextPage = () => {
         setUser(userAuth);
       }
     });
-  }, [router]);
+  }, [router, setUser]);
 
   if (!user) return <LoadingPage />;
 
   return (
     <div className="flex h-screen w-screen bg-main-2">
+      <Head>
+        <title>Classic Chat App</title>
+      </Head>
       <SideBar />
       <ChatLayout />
     </div>
