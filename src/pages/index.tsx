@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Head from "next/head";
 import { useAtom } from "jotai";
 
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/googleAuth";
 import { LoadingPage } from "../components/LazyLoad";
 import SideBar from "../layouts/SideBar";

@@ -5,10 +5,8 @@ import TextInput from "../components/TextInput";
 
 import {
   collection,
-  getDocs,
   FieldValue,
   addDoc,
-  doc,
   onSnapshot,
   Timestamp,
   query,
