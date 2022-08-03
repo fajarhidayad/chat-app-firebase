@@ -1,20 +1,30 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { fadeOut, fadeUp } from "./animation";
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   delay?: number;
-  classNames?: string;
+  className?: string;
+  variant: "FADE_OUT" | "FADE_UP";
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, delay, classNames }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  delay,
+  className,
+  variant,
+}) => {
+  const animateVariant = variant === "FADE_OUT" ? fadeOut : fadeUp;
+
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      initial={"hidden"}
+      animate={"visible"}
+      exit={"hidden"}
+      variants={animateVariant}
       transition={{ duration: 0.3, ease: "easeOut", delay }}
-      className={classNames}
+      className={className}
     >
       {children}
     </motion.div>

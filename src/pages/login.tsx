@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signInWithGoogle, auth } from "../utils/googleAuth";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { useRouter } from "next/router";
-import LoadingPage from "../components/LazyLoad/LoadingPage";
+import { LoadingPage } from "../components/LazyLoad";
 import Layout from "../components/Layout/Layout";
 
 const LoginPage: NextPage = () => {
@@ -37,7 +37,7 @@ const LoginPage: NextPage = () => {
         <title>Login | Classic Chat App</title>
       </Head>
 
-      <Layout>
+      <Layout variant="FADE_OUT">
         <section className="bg-grey-1 rounded-xl w-[500px] p-6 shadow mx-4 flex flex-col items-center">
           <h1 className="text-center font-semibold text-2xl text-white mb-5">
             Classic Chat App

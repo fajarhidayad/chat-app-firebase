@@ -1,15 +1,19 @@
 export const fadeOut = {
-  start: {
+  hidden: {
     opacity: 0,
   },
-  animate: {
+  visible: {
     opacity: 1,
   },
-  exit: {
+};
+
+export const fadeUp = {
+  hidden: {
     opacity: 0,
+    translateY: "15%",
   },
-  transition: {
-    duration: 0.3,
-    ease: "easeOut",
+  visible: {
+    opacity: 1,
+    translateY: "0%",
   },
 };
