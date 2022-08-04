@@ -20,7 +20,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         id="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="focus:outline-none bg-transparent"
+        className="flex-1 focus:outline-none bg-transparent"
         placeholder="Search"
       />
     </div>

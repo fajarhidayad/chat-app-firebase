@@ -8,7 +8,7 @@ import Layout from "../components/Layout";
 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
-import { channelIdAtom } from "../store";
+import { channelIdAtom, modalAtom } from "../store";
 import { useAtom } from "jotai";
 
 interface Channel {
@@ -20,7 +20,8 @@ interface Channel {
 const SideBar = () => {
   const [searchValue, setSearchValue] = useState("");
   const [channels, setChannels] = useState<Channel[]>([]);
-  const [channelId, setChannelId] = useAtom(channelIdAtom);
+  const [, setChannelId] = useAtom(channelIdAtom);
+  const [, setModal] = useAtom(modalAtom);
 
   useEffect(() => {
     const getChannels = async () => {
@@ -54,7 +55,10 @@ const SideBar = () => {
         className="py-6 px-8 shadow-md flex justify-between items-center"
       >
         <h1 className="font-semibold text-xl">Channelss</h1>
-        <button className="bg-grey-1 p-3 rounded-lg">
+        <button
+          onClick={() => setModal(true)}
+          className="bg-grey-1 p-3 rounded-lg"
+        >
           <FaPlus />
         </button>
       </Layout>

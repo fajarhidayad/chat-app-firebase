@@ -5,7 +5,6 @@ import TextInput from "../components/TextInput";
 
 import {
   collection,
-  FieldValue,
   addDoc,
   onSnapshot,
   Timestamp,
@@ -22,7 +21,7 @@ interface Message {
   userId: string;
   name: string;
   text: string;
-  createdAt: FieldValue;
+  createdAt: Date;
 }
 
 const ChatLayout = () => {
@@ -38,7 +37,7 @@ const ChatLayout = () => {
         text: message,
         name: user.displayName,
         userId: user.uid,
-        createdAt: Timestamp.fromDate(new Date()),
+        createdAt: Timestamp.now(),
       });
       setMessage("");
     }
@@ -56,7 +55,8 @@ const ChatLayout = () => {
       const newMessage: Message[] = [];
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-          newMessage.push(change.doc.data() as Message);
+          const date = change.doc.data().createdAt.toDate();
+          newMessage.push({ ...change.doc.data(), createdAt: date } as Message);
         }
       });
       if (newMessage.length > 1) {
@@ -84,6 +84,7 @@ const ChatLayout = () => {
               key={`${item.createdAt}`}
               name={item.name}
               text={item.text}
+              date={item.createdAt}
             />
           ))}
         </ul>

@@ -9,10 +9,13 @@ import { auth } from "../utils/googleAuth";
 import { LoadingPage } from "../components/LazyLoad";
 import SideBar from "../layouts/SideBar";
 import ChatLayout from "../layouts/ChatLayout";
-import { userAtom } from "../store";
+import { modalAtom, userAtom } from "../store";
+import Modal from "../components/Modal";
+import { AnimatePresence } from "framer-motion";
 
 const Home: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);
+  const [modal] = useAtom(modalAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,12 +31,13 @@ const Home: NextPage = () => {
   if (!user) return <LoadingPage />;
 
   return (
-    <div className="flex h-screen w-screen bg-main-2">
+    <div className="flex h-screen w-screen bg-main-2 relative">
       <Head>
         <title>Classic Chat App</title>
       </Head>
       <SideBar />
-      <ChatLayout />
+      {/* <ChatLayout /> */}
+      <AnimatePresence>{modal && <Modal />}</AnimatePresence>
     </div>
   );
 };
