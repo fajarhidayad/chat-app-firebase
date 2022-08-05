@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaPlus } from "react-icons/fa";
 import { SearchInput } from "../components/TextInput";
 import ChannelThumbnail from "../components/ChannelThumbnail";
 import ProfileInfoBar from "../components/ProfileInfoBar";
@@ -8,8 +7,9 @@ import Layout from "../components/Layout";
 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
-import { activeChannelAtom, modalAtom } from "../store";
+import { activeChannelAtom, channelDetailAtom, modalAtom } from "../store";
 import { useAtom } from "jotai";
+import { SideBarHeader } from "../components/Header";
 
 interface Channel {
   id: string;
@@ -21,8 +21,9 @@ const SideBar = () => {
   const [searchValue, setSearchValue] = useState("");
   const [channels, setChannels] = useState<Channel[]>([]);
 
-  const [, setActiveChannel] = useAtom(activeChannelAtom);
-  const [, setModal] = useAtom(modalAtom);
+  const [activeChannel, setActiveChannel] = useAtom(activeChannelAtom);
+  const [channelDetail] = useAtom(channelDetailAtom);
+  const [modal] = useAtom(modalAtom);
 
   const filteredChannels = channels.filter((channel) =>
     channel.name.toLowerCase().includes(searchValue)
@@ -45,7 +46,7 @@ const SideBar = () => {
     };
 
     getChannels();
-  }, [setActiveChannel]);
+  }, [setActiveChannel, modal]);
 
   return (
     <motion.aside
@@ -54,40 +55,39 @@ const SideBar = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="hidden bg-main-1 w-[350px] text-white lg:flex flex-col"
     >
-      <Layout
-        variant="FADE_OUT"
-        delay={0.5}
-        className="py-6 px-8 shadow-md flex justify-between items-center"
-      >
-        <h1 className="font-semibold text-xl">Channels</h1>
-        <button
-          onClick={() => setModal(true)}
-          className="bg-grey-1 p-3 rounded-lg"
-        >
-          <FaPlus />
-        </button>
-      </Layout>
+      <SideBarHeader />
 
       <Layout
         variant="FADE_OUT"
         delay={0.5}
         className="px-8 mt-5 flex-1 flex flex-col"
       >
-        <SearchInput
-          value={searchValue}
-          setValue={(input) => setSearchValue(input)}
-        />
-
-        <ul className="my-5 -mx-6 scrollbar">
-          {filteredChannels.map((item) => (
-            <ChannelThumbnail
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              description={item.description}
+        {channelDetail ? (
+          <div>
+            <h1 className="uppercase font-semibold mb-3 text-xl">
+              {activeChannel?.name}
+            </h1>
+            <p>{activeChannel?.description}</p>
+          </div>
+        ) : (
+          <>
+            <SearchInput
+              value={searchValue}
+              setValue={(input) => setSearchValue(input)}
             />
-          ))}
-        </ul>
+
+            <ul className="my-5 -mx-6 scrollbar">
+              {filteredChannels.map((item) => (
+                <ChannelThumbnail
+                  key={item.id}
+                  id={item.id}
+                  name={item.name}
+                  description={item.description}
+                />
+              ))}
+            </ul>
+          </>
+        )}
 
         <ProfileInfoBar />
       </Layout>

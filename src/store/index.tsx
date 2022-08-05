@@ -17,5 +17,6 @@ export interface Message {
 
 export const userAtom = atom<User | null>(null);
 export const activeChannelAtom = atom<Channel | null>(null);
+export const channelDetailAtom = atom<boolean>(false);
 export const messageAtom = atom<Message[]>([]);
 export const modalAtom = atom<boolean>(false);

@@ -9,13 +9,11 @@ import { auth } from "../utils/googleAuth";
 import { LoadingPage } from "../components/LazyLoad";
 import SideBar from "../layouts/SideBar";
 import ChatLayout from "../layouts/ChatLayout";
-import { modalAtom, userAtom } from "../store";
+import { userAtom } from "../store";
 import Modal from "../components/Modal";
-import { AnimatePresence } from "framer-motion";
 
 const Home: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);
-  const [modal] = useAtom(modalAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +35,7 @@ const Home: NextPage = () => {
       </Head>
       <SideBar />
       <ChatLayout />
-      <AnimatePresence>{modal && <Modal />}</AnimatePresence>
+      <Modal />
     </div>
   );
 };

@@ -1,12 +1,19 @@
 import { useAtom } from "jotai";
 import React from "react";
-import { activeChannelAtom, Channel, messageAtom } from "../../store";
+import {
+  activeChannelAtom,
+  Channel,
+  channelDetailAtom,
+  messageAtom,
+} from "../../store";
 
 const ChannelThumbnail: React.FC<Channel> = ({ id, name, description }) => {
   const [activeChannel, setActiveChannel] = useAtom(activeChannelAtom);
   const [, setMessages] = useAtom(messageAtom);
+  const [, setChannelDetail] = useAtom(channelDetailAtom);
 
   const onClickActiveChannel = () => {
+    setChannelDetail(true);
     if (activeChannel && activeChannel.id === id) return;
     setActiveChannel({
       id,
