@@ -8,7 +8,7 @@ import Layout from "../components/Layout";
 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase";
-import { channelIdAtom, modalAtom } from "../store";
+import { activeChannelAtom, modalAtom } from "../store";
 import { useAtom } from "jotai";
 
 interface Channel {
@@ -20,8 +20,13 @@ interface Channel {
 const SideBar = () => {
   const [searchValue, setSearchValue] = useState("");
   const [channels, setChannels] = useState<Channel[]>([]);
-  const [, setChannelId] = useAtom(channelIdAtom);
+
+  const [, setActiveChannel] = useAtom(activeChannelAtom);
   const [, setModal] = useAtom(modalAtom);
+
+  const filteredChannels = channels.filter((channel) =>
+    channel.name.toLowerCase().includes(searchValue)
+  );
 
   useEffect(() => {
     const getChannels = async () => {
@@ -36,11 +41,11 @@ const SideBar = () => {
       });
 
       setChannels(newChannels);
-      setChannelId(newChannels[0].id);
+      setActiveChannel(newChannels[0]);
     };
 
     getChannels();
-  }, [setChannelId]);
+  }, [setActiveChannel]);
 
   return (
     <motion.aside
@@ -54,7 +59,7 @@ const SideBar = () => {
         delay={0.5}
         className="py-6 px-8 shadow-md flex justify-between items-center"
       >
-        <h1 className="font-semibold text-xl">Channelss</h1>
+        <h1 className="font-semibold text-xl">Channels</h1>
         <button
           onClick={() => setModal(true)}
           className="bg-grey-1 p-3 rounded-lg"
@@ -74,9 +79,10 @@ const SideBar = () => {
         />
 
         <ul className="my-5 -mx-6 scrollbar">
-          {channels.map((item) => (
+          {filteredChannels.map((item) => (
             <ChannelThumbnail
               key={item.id}
+              id={item.id}
               name={item.name}
               description={item.description}
             />

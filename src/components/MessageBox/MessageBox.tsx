@@ -10,10 +10,21 @@ interface MessageBoxProps {
 const MessageBox: React.FC<MessageBoxProps> = ({ name, text, date }) => {
   const timestamp = formatDistanceToNow(date);
 
+  const getInitialName = (name: string) => {
+    const fullName = name.split(" ");
+    if (fullName.length > 1) {
+      return fullName[0].slice(0, 1) + fullName[1].slice(0, 1);
+    } else {
+      return fullName[0].slice(0, 1);
+    }
+  };
+
+  const initialName = getInitialName(name);
+
   return (
     <li className="flex py-3">
       <div className="rounded-full bg-grey-2 w-10 h-10 p-3 flex items-center justify-center mr-4">
-        {name.slice(0, 1)}
+        {initialName}
       </div>
 
       <div>

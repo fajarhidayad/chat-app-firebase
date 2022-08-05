@@ -14,26 +14,18 @@ import {
 } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { useAtom } from "jotai";
-import { channelIdAtom, userAtom } from "../store";
-
-interface Message {
-  id?: string;
-  userId: string;
-  name: string;
-  text: string;
-  createdAt: Date;
-}
+import { activeChannelAtom, messageAtom, userAtom, Message } from "../store";
 
 const ChatLayout = () => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [channelId] = useAtom(channelIdAtom);
+  const [messages, setMessages] = useAtom(messageAtom);
+  const [activeChannel] = useAtom(activeChannelAtom);
   const [user] = useAtom(userAtom);
 
   const sendMessage = async () => {
     if (!message) return;
-    if (channelId && user) {
-      await addDoc(collection(db, "channels", channelId, "messages"), {
+    if (activeChannel && user) {
+      await addDoc(collection(db, "channels", activeChannel.id, "messages"), {
         text: message,
         name: user.displayName,
         userId: user.uid,
@@ -44,10 +36,10 @@ const ChatLayout = () => {
   };
 
   useEffect(() => {
-    if (!channelId) return;
+    if (!activeChannel) return;
 
     const q = query(
-      collection(db, "channels", channelId, "messages"),
+      collection(db, "channels", activeChannel.id, "messages"),
       orderBy("createdAt", "desc"),
       limit(8)
     );
@@ -69,13 +61,15 @@ const ChatLayout = () => {
     return () => {
       unsub();
     };
-  }, [channelId]);
+  }, [activeChannel, setMessages]);
 
   return (
     <Layout variant="FADE_OUT" delay={0.5} className="flex-1 text-white">
       <section className="flex flex-col h-screen pb-6">
         <header className="shadow-md py-6 px-3 md:px-6 lg:px-16 h-[88px] flex items-center">
-          <h1 className="font-semibold text-xl">Welcome</h1>
+          <h1 className="font-semibold text-xl capitalize">
+            {activeChannel?.name}
+          </h1>
         </header>
 
         <ul className="flex-1 flex flex-col-reverse px-3 md:px-6 lg:px-16 overflow-y-scroll scrollbar">

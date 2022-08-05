@@ -36,7 +36,7 @@ const Home: NextPage = () => {
         <title>Classic Chat App</title>
       </Head>
       <SideBar />
-      {/* <ChatLayout /> */}
+      <ChatLayout />
       <AnimatePresence>{modal && <Modal />}</AnimatePresence>
     </div>
   );

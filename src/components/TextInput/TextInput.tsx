@@ -18,7 +18,11 @@ const TextInput: React.FC<TextInputProps> = ({ value, setValue, onSubmit }) => {
         className="focus:outline-none bg-transparent flex-1"
         placeholder="Type a message"
       />
-      <button onClick={onSubmit} className="bg-grey-2 rounded p-2">
+      <button
+        disabled={value.length < 1}
+        onClick={onSubmit}
+        className="bg-grey-2 rounded p-2 disabled:bg-grey-2/60 disabled:text-slate-400"
+      >
         <MdSend size={25} />
       </button>
     </div>
